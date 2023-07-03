@@ -7,21 +7,19 @@
 Adapted from code contributed by Mika.
 """
 import os
-import tensorflow as tf
+
 WEIGHTS_PATH = ('resnet_like_weights_tf_dim_ordering_tf_kernels.h5')
-import math
 from keras.models import Model
-from keras.layers import Input, Dense, Conv1D, MaxPool1D, ReLU, Dropout, Softmax, concatenate, Flatten, Reshape, \
-    GaussianNoise,GaussianDropout
+from keras.layers import Input, Dense, concatenate, Reshape, \
+    GaussianDropout
 from keras.layers.convolutional import Conv2D
-from keras.layers import CuDNNLSTM,Lambda,Multiply,Add,Subtract,MaxPool2D,CuDNNGRU,LeakyReLU,BatchNormalization
-import tensorflow as tf
+from keras.layers import MaxPool2D, CuDNNGRU
 
 
 def CGDNN(weights=None,
-           input_shape=[1, 2, 1024],
-           classes=24,
-           **kwargs):
+          input_shape=[1, 2, 1024],
+          classes=24,
+          **kwargs):
     if weights is not None and not (os.path.exists(weights)):
         raise ValueError('The `weights` argument should be either '
                          '`None` (random initialization), '
@@ -42,7 +40,7 @@ def CGDNN(weights=None,
     x4 = Reshape(target_shape=((50, 4056)), name='reshape4')(x11)
     x4 = CuDNNGRU(units=50)(x4)
     x4 = GaussianDropout(dr)(x4)
-    x = Dense(256, activation='relu', name='fc4',kernel_initializer='he_normal')(x4)
+    x = Dense(256, activation='relu', name='fc4', kernel_initializer='he_normal')(x4)
     x = GaussianDropout(dr)(x)
     x = Dense(classes, activation='softmax', name='softmax')(x)
     model = Model(inputs=input, outputs=x)

@@ -8,13 +8,14 @@ Adapted from code contributed by Mika.
 """
 import os
 
+from keras.layers import CuDNNGRU
+from keras.layers import Input, Dense
 from keras.models import Model
-from keras.layers import Input,Dense,Conv1D,MaxPool1D,ReLU,Dropout,Softmax
-from keras.layers import Bidirectional,Flatten,CuDNNGRU
 from keras.utils.vis_utils import plot_model
 
+
 def GRUModel(weights=None,
-             input_shape=[128,2],
+             input_shape=[128, 2],
              classes=10,
              **kwargs):
     if weights is not None and not (os.path.exists(weights)):
@@ -22,17 +23,17 @@ def GRUModel(weights=None,
                          '`None` (random initialization), '
                          'or the path to the weights file to be loaded.')
 
-    input = Input(input_shape,name='input')
+    input = Input(input_shape, name='input')
     x = input
 
-    #LSTM Unit
-    x = CuDNNGRU(units=128,return_sequences = True)(x)
+    # LSTM Unit
+    x = CuDNNGRU(units=128, return_sequences=True)(x)
     x = CuDNNGRU(units=128)(x)
 
-    #DNN
-    x = Dense(classes,activation='softmax',name='softmax')(x)
+    # DNN
+    x = Dense(classes, activation='softmax', name='softmax')(x)
 
-    model = Model(inputs = input,outputs = x)
+    model = Model(inputs=input, outputs=x)
 
     # Load weights.
     if weights is not None:
@@ -40,13 +41,15 @@ def GRUModel(weights=None,
 
     return model
 
+
 import keras
+
 if __name__ == '__main__':
-    model = LSTMModel(None,input_shape=(128,2),classes=11)
+    model = LSTMModel(None, input_shape=(128, 2), classes=11)
 
     adam = keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
     model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer=adam)
-    plot_model(model, to_file='model.png',show_shapes=True) # print model
+    plot_model(model, to_file='model.png', show_shapes=True)  # print model
 
     print('models layers:', model.layers)
     print('models config:', model.get_config())

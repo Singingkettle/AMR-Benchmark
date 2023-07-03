@@ -8,17 +8,16 @@ Adapted from code contributed by Mika.
 """
 import os
 
-
-from keras.models import Model
-from keras.layers import Input,Dense,Conv1D,MaxPool1D,ReLU,Dropout,Softmax,concatenate,Flatten,Reshape,MaxPool2D,LSTM,Activation, CuDNNLSTM
-from keras.layers.convolutional import Conv2D
 from keras.layers import CuDNNLSTM
+from keras.layers import Input, Dense, Dropout, Reshape, Activation
+from keras.layers.convolutional import Conv2D
+from keras.models import Model
 
 
 def CLDNN(weights=None,
-             input_shape1=[2,128],
-             classes=10,
-             **kwargs):
+          input_shape1=[2, 128],
+          classes=10,
+          **kwargs):
     if weights is not None and not (os.path.exists(weights)):
         raise ValueError('The `weights` argument should be either '
                          '`None` (random initialization), '
@@ -59,14 +58,14 @@ def CLDNN(weights=None,
     # Load weights.
     if weights is not None:
         model.load_weights(weights)
-    
+
     return model
 
 
 import keras
-from keras.utils.vis_utils import plot_model
+
 if __name__ == '__main__':
-    model = MCLDNN(None,classes=10)
+    model = MCLDNN(None, classes=10)
 
     adam = keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
     model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer=adam)

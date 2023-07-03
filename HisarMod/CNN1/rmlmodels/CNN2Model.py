@@ -1,20 +1,16 @@
 import os
+
 os.environ["KERAS_BACKEND"] = "tensorflow"
 # os.environ["THEANO_FLAGS"]  = "device=gpu%d"%(0)
-import numpy as np
-import keras.models as models
-from keras.layers.core import Reshape,Dense,Dropout,Activation,Flatten
-from keras.layers.convolutional import Convolution2D,Conv2D, MaxPooling2D, ZeroPadding2D
-from keras.layers.core import Activation
-from keras.layers import Input, Dense, Conv1D, MaxPool1D, ReLU, Dropout, Softmax, concatenate, Flatten, Reshape, \
-    GaussianNoise,Activation,GaussianDropout
+from keras.layers.convolutional import Conv2D
+from keras.layers import Input, Dense, Dropout, Flatten
 from keras.models import Model
 
 
 def CNN2Model(weights=None,
-             input_shape=[2,1024],
-             classes=26,
-             **kwargs):
+              input_shape=[2, 1024],
+              classes=26,
+              **kwargs):
     if weights is not None and not (os.path.exists(weights)):
         raise ValueError('The `weights` argument should be either '
                          '`None` (random initialization), '
@@ -37,6 +33,7 @@ def CNN2Model(weights=None,
         model.load_weights(weights)
 
     return model
+
 
 if __name__ == '__main__':
     print(CNN2Model().summary())

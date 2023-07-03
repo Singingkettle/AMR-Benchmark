@@ -3,16 +3,16 @@ import os
 WEIGHTS_PATH = ('resnet_like_weights_tf_dim_ordering_tf_kernels.h5')
 
 from keras.models import Model
-from keras.layers import Input,Dense,Conv1D,MaxPool1D,ReLU,Dropout,Softmax,concatenate,Flatten,Reshape,LeakyReLU,Subtract,CuDNNGRU
+from keras.layers import Input, Dense, Dropout, concatenate, Flatten
 from keras.layers.convolutional import Conv2D
-from keras.layers import CuDNNLSTM,AveragePooling2D,MaxPool2D,Add
+from keras.layers import AveragePooling2D, MaxPool2D, Add
 
 
 def MCNET(weights=None,
-           input_shape=[2,128],
-           input_shape2=[1024],
-           classes=11,
-           **kwargs):
+          input_shape=[2, 128],
+          input_shape2=[1024],
+          classes=11,
+          **kwargs):
     if weights is not None and not (os.path.exists(weights)):
         raise ValueError('The `weights` argument should be either '
                          '`None` (random initialization), '
@@ -133,19 +133,22 @@ def MCNET(weights=None,
 
     model = Model(inputs=input, outputs=x)
 
-        # Load weights.
+    # Load weights.
     if weights is not None:
-            model.load_weights(weights)
+        model.load_weights(weights)
 
     return model
+
+
 import keras
 from keras.utils.vis_utils import plot_model
+
 if __name__ == '__main__':
-    model = MCNET(None,classes=11)
+    model = MCNET(None, classes=11)
 
     adam = keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
     model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer=adam)
-    plot_model(model, to_file='model.png',show_shapes=True) # print model
+    plot_model(model, to_file='model.png', show_shapes=True)  # print model
     print('models layers:', model.layers)
     print('models config:', model.get_config())
     print('models summary:', model.summary())

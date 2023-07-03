@@ -1,8 +1,11 @@
 ﻿import pickle
+
 import numpy as np
 
-def load_data(filename=r'E:\Richard_zhangxx\My_Research\AMR\Thesis_code\Thesis_code1080ti-experiment\data\RML2016.10b.dat'):
-# def load_data(filename=r'/home/xujialang/ZhangFuXin/AMR/tranining/RML2016.10b.dat'):
+
+def load_data(
+        filename=r'E:\Richard_zhangxx\My_Research\AMR\Thesis_code\Thesis_code1080ti-experiment\data\RML2016.10b.dat'):
+    # def load_data(filename=r'/home/xujialang/ZhangFuXin/AMR/tranining/RML2016.10b.dat'):
     #    Xd1 = pickle.load(open(filename1,'rb'),encoding='iso-8859-1')#Xd1.keys() mod中没有AM-SSB Xd1(120W,2,128)
     Xd = pickle.load(open(filename, 'rb'), encoding='iso-8859-1')  # Xd2(22W,2,128)
     mods, snrs = [sorted(list(set([k[j] for k in Xd.keys()]))) for j in [0, 1]]
@@ -48,6 +51,7 @@ def load_data(filename=r'E:\Richard_zhangxx\My_Research\AMR\Thesis_code\Thesis_c
         yy1 = np.zeros([len(yy), len(mods)])
         yy1[np.arange(len(yy)), yy] = 1
         return yy1
+
     Y_train = to_onehot(list(map(lambda x: mods.index(lbl[x][0]), train_idx)))
     Y_val = to_onehot(list(map(lambda x: mods.index(lbl[x][0]), val_idx)))
     Y_test = to_onehot(list(map(lambda x: mods.index(lbl[x][0]), test_idx)))
@@ -61,4 +65,4 @@ def load_data(filename=r'E:\Richard_zhangxx\My_Research\AMR\Thesis_code\Thesis_c
 
 if __name__ == '__main__':
     (mods, snrs, lbl), (X_train, Y_train), (X_val, Y_val), (X_test, Y_test), (
-    train_idx, val_idx, test_idx) = load_data()
+        train_idx, val_idx, test_idx) = load_data()

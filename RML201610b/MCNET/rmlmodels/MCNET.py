@@ -1,30 +1,33 @@
 import os
-import tensorflow as tf
+
 WEIGHTS_PATH = ('resnet_like_weights_tf_dim_ordering_tf_kernels.h5')
-import math
 from keras.models import Model
-from keras.layers import Input, Dense, Conv1D, MaxPool1D, ReLU, Dropout, Softmax, concatenate, Flatten, Reshape, \
-    GaussianNoise
+from keras.layers import Input, Dense, Dropout, concatenate, Flatten
 from keras.layers.convolutional import Conv2D
-from keras.layers import CuDNNLSTM,AveragePooling2D,Multiply,Add,Subtract,MaxPool2D,CuDNNGRU,LeakyReLU,BatchNormalization
+from keras.layers import AveragePooling2D, Add, MaxPool2D
 import tensorflow as tf
+
+
 def l2_normalize(x):
     y = tf.keras.backend.max(tf.keras.backend.sum(x ** 2, -1, keepdims=True), -1, keepdims=True)
     return x / tf.keras.backend.sqrt(y)
+
 
 def cal1(x):
     y = tf.keras.backend.cos(x)
     return y
 
+
 def cal2(x):
     y = tf.keras.backend.sin(x)
     return y
 
+
 def MCNET(weights=None,
-           input_shape=[2, 128],
-           input_shape2=[128],
-           classes=10,
-           **kwargs):
+          input_shape=[2, 128],
+          input_shape2=[128],
+          classes=10,
+          **kwargs):
     if weights is not None and not (os.path.exists(weights)):
         raise ValueError('The `weights` argument should be either '
                          '`None` (random initialization), '
